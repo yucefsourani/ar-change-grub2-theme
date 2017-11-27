@@ -1,4 +1,4 @@
-# ar-change-grub2-theme Beta1.0
+# ar-change-grub2-theme Beta1.0 (Fedora Only)
 
 # Warning !! Use This Script on Your own Risk
 
