@@ -42,6 +42,9 @@ Ex:
     
     sudo {} --link https://github.com/shvchk/poly-light/archive/master.zip
 
+
+REPORTING BUGS
+	https://github.com/yucefsourani/ar-change-grub2-theme
 """.format(__file__,__file__,__file__)
 
 class Grub():
