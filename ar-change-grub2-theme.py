@@ -38,7 +38,7 @@ help_ = """
 Error:
     Set Grub2 Theme Link
 Ex:
-    sudo {} --link https://dl.opendesktop.org/api/files/download/id/1511617368/Atomic-GRUB-Theme.tar.gz
+    sudo {} --link https://dl.opendesktop.org/api/files/downloadfile/id/1511797395/s/2af1ed30ff9eca25d805497b0e4958d4/t/1513810268/Atomic-GRUB-Theme.tar.gz
     
     sudo {} --link https://github.com/shvchk/poly-light/archive/master.zip
 
@@ -110,12 +110,13 @@ class Grub():
             for line in mf:
                 line = line.strip()
                 if line:
-                    splitline = line.split("=",1)
-                    k_ = splitline[0].strip()
-                    v_ = splitline[1].strip()
-                    if k_=="GRUB_TERMINAL_OUTPUT":
-                        k_="#GRUB_TERMINAL_OUTPUT"
-                    result.setdefault(k_,v_)
+                    if "=" in line:
+                        splitline = line.split("=",1)
+                        k_ = splitline[0].strip()
+                        v_ = splitline[1].strip()
+                        if k_=="GRUB_TERMINAL_OUTPUT":
+                            k_="#GRUB_TERMINAL_OUTPUT"
+                        result.setdefault(k_,v_)
             
         if config not in result.keys():
             result.setdefault(config,value)
