@@ -44,7 +44,7 @@ Ex:
 
 
 REPORTING BUGS
-	https://github.com/yucefsourani/ar-change-grub2-theme
+    https://github.com/yucefsourani/ar-change-grub2-theme
 """.format(__file__,__file__,__file__)
 
 class Grub():
@@ -67,7 +67,7 @@ class Grub():
                     op.write(chunk)
                     psize += 600
                     print ("["+n+"-"*(100-count)+"]"+" "+str(size)+"b"+" "+str(round((psize*100)/size,2))+"%",end="\r",flush=True)
-			
+            
             print (" "*200,end="\r",flush=True)
             print ("["+"#"*100+"]"+" "+str(size)+"b"+" "+"100%")
         except:
@@ -81,6 +81,8 @@ class Grub():
             fun, mode = tarfile.open, 'r:gz'
         elif location.endswith('.tar.bz2') or location.endswith('.tbz'):
             fun, mode = tarfile.open, 'r:bz2'
+        elif location.endswith('.tar.xz') :
+            fun, mode = tarfile.open, 'r:xz'
         else: 
             return False
         cwd = getcwd()
