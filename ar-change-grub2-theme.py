@@ -38,9 +38,8 @@ help_ = """
 Error:
     Set Grub2 Theme Link
 Ex:
-    sudo {} --link https://dl.opendesktop.org/api/files/downloadfile/id/1511797395/s/2af1ed30ff9eca25d805497b0e4958d4/t/1513810268/Atomic-GRUB-Theme.tar.gz
+    sudo {} --link https://dl.opendesktop.org/api/files/downloadfile/id/1515426341/s/8192c84fbabf70f8713c84b1fcdc0c64/t/1523984154/u/444679/Atomic-GRUB-Theme.tar.gz
     
-    sudo {} --link https://github.com/shvchk/poly-light/archive/master.zip
 
 
 REPORTING BUGS
