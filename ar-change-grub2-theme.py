@@ -31,20 +31,22 @@ import tarfile
 import zipfile
 import shutil
 import sys
+import tempfile
 
 help_ = """
 {}
 -------------------------------------
 Error:
-    Set Grub2 Theme Link
+    Set Grub2 Theme Link Or Location
 Ex:
     sudo {} --link https://dl.opendesktop.org/api/files/downloadfile/id/1515426341/s/8192c84fbabf70f8713c84b1fcdc0c64/t/1523984154/u/444679/Atomic-GRUB-Theme.tar.gz
+    sudo {} --link Downloads/megano-grub-fedora-install.tar.gz
     
 
 
 REPORTING BUGS
     https://github.com/yucefsourani/ar-change-grub2-theme
-""".format(__file__,__file__,__file__)
+""".format(__file__,__file__,__file__,__file__)
 
 class Grub():
     def downlaod_theme(self,link,location="/tmp",agent="Mozilla/5.0"):
@@ -55,7 +57,8 @@ class Grub():
         saveas   = os.path.join(location,name)
         try:
             session = requests.session()
-            opurl = session.get(link,headers=agent,stream=True)
+            opurl = session.get(link,headers=agent,stream=True,allow_redirects=True)
+            opurl.raise_for_status()
             size = int(opurl.headers["Content-Length"])
             psize = 0
             print ("["+"-"*100+"]"+" "+str(size)+"b"+" "+"0%",end="\r",flush=True)
@@ -69,6 +72,12 @@ class Grub():
             
             print (" "*200,end="\r",flush=True)
             print ("["+"#"*100+"]"+" "+str(size)+"b"+" "+"100%")
+        except requests.exceptions.MissingSchema:
+            if  subprocess.call("cp {} {}".format(link,location),shell=True)!=0:
+                return False
+            if not os.path.isfile(saveas):
+                return False
+            return saveas
         except:
             return False
         return saveas
@@ -160,7 +169,7 @@ class Grub():
 
 def main(link,system_theme_location,grub_mkconfig,legacy_boot_menu,efi_boot_menu):
     grub=Grub()
-    themefile = grub.downlaod_theme(link)
+    themefile = grub.downlaod_theme(link,location=tempfile.gettempdir())
     if themefile:
         themefolder = grub.unpack_theme_file(themefile)
         if themefolder:
