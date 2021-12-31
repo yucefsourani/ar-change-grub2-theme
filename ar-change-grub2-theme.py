@@ -32,6 +32,7 @@ import zipfile
 import shutil
 import sys
 import tempfile
+import argparse
 
 help_ = """
 {}
@@ -49,7 +50,7 @@ REPORTING BUGS
 """.format(__file__,__file__,__file__,__file__)
 
 class Grub():
-    def downlaod_theme(self,link,location="/tmp",agent="Mozilla/5.0"):
+    def downlaod_theme(self,link,location=tempfile.gettempdir(),agent="Mozilla/5.0"):
         agent = agent={"User-Agent":agent}
         location = os.path.expanduser(os.path.join(location,"arfedora_grub_theme",str(int(time.time()))))
         makedirs(location, exist_ok=True)
@@ -78,7 +79,8 @@ class Grub():
             if not os.path.isfile(saveas):
                 return False
             return saveas
-        except:
+        except Exception as e:
+            print(e)
             return False
         return saveas
 
@@ -99,12 +101,14 @@ class Grub():
             file_ = fun(location, mode)
             try:
                 file_.extractall()
-            except:
+            except Exception as e:
+                print(e)
                 os.chdir(cwd)
                 return False
             finally:
                 file_.close()
-        except:
+        except Exception as e:
+            print(e)
             os.chdir(cwd)
             return False
         finally:
@@ -139,7 +143,8 @@ class Grub():
             with open("/etc/default/grub","w") as mf:
                 for k,v in result.items():
                     mf.write(k+"="+v+"\n")
-        except:
+        except Exception as e:
+            print(e)
             return False
         check  = self.update_grub(command,legacybios,efi)
         if check == 0:
@@ -195,23 +200,32 @@ def main(link,system_theme_location,grub_mkconfig,legacy_boot_menu,efi_boot_menu
 if __name__ == "__main__":
     if getuid()!=0:
         print("\nRun Script With Root Permissions.\n")
-        print(help_)
         exit(1)
-        
-    if "--link" in sys.argv:
-        try:
-            link = sys.argv[sys.argv.index("--link")+1].strip("\"").strip("'")
-        except:
-            print(help_)
-            exit(1)
-            
-    else:
-        print(help_)
-        exit(1)
-    system_theme_location = "/boot/grub2/themes"
-    grub_mkconfig         = "grub2-mkconfig"
-    legacy_boot_menu      = "/boot/grub2/grub.cfg"
-    efi_boot_menu         = "/boot/efi/EFI/fedora/grub.cfg"
+    parser = argparse.ArgumentParser(description = "Script To Change Grub2 Theme.")
+    parser.version = "1.0"
+    parser.add_argument("-v","--version",action="version")
+    parser.add_argument("-l","--link",required=True,action="store",type=str,metavar="Link|zip|tar",help="(Link | Compressed File Location) For Grub2 Theme")
+    parser.add_argument("-u","--ubuntu",action="store_true",help="Ubuntu Support (default is Fedora Linux)")
+    parser.add_argument("-a","--archlinux",action="store_true",help="Archlinux Support (default is Fedora Linux)")
+    args = parser.parse_args()
+    link = args.link
+    
+    if args.ubuntu:
+        system_theme_location = "/boot/grub/themes"
+        grub_mkconfig         = "grub-mkconfig"
+        legacy_boot_menu      = "/boot/grub/grub.cfg"
+        efi_boot_menu         = "/boot/grub/grub.cfg"
+    elif args.archlinux:
+        system_theme_location = "/boot/grub/themes"
+        grub_mkconfig         = "grub-mkconfig"
+        legacy_boot_menu      = "/boot/grub/grub.cfg"
+        efi_boot_menu         = "/boot/grub/grub.cfg"
+    else: # default fedora
+        system_theme_location = "/boot/grub2/themes"
+        grub_mkconfig         = "grub2-mkconfig"
+        legacy_boot_menu      = "/boot/grub2/grub.cfg"
+        efi_boot_menu         = "/boot/efi/EFI/fedora/grub.cfg"
+    
     if main(link,system_theme_location,grub_mkconfig,legacy_boot_menu,efi_boot_menu):
         exit(0)
     else:
