@@ -36,7 +36,7 @@ https://www.gnome-look.org/p/1176413/
   
   * ``` cd ~/ar-change-grub2-theme```
   
-  * ``` sudo ./ar-change-grub2-theme.py```
+  * ``` sudo ./ar-change-grub2-theme.py -h ```
 
 
 
