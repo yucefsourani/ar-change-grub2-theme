@@ -1,4 +1,4 @@
-# ar-change-grub2-theme Beta1.0 (Fedora Only)
+# ar-change-grub2-theme 1.0 (Tested On Fedora Only)
 
 # Warning !! Use This Script on Your own Risk
 
@@ -11,7 +11,7 @@ https://arfedora.blogspot.com
 
 # Screenshot
 
-![Alt text](https://raw.githubusercontent.com/yucefsourani/ar-change-grub2-theme/master/Screenshot%20from%202017-11-27%2001-36-35.png "Screenshot")
+![Alt text](https://raw.githubusercontent.com/yucefsourani/ar-change-grub2-theme/master/Screenshot11.jpg "Screenshot")
 
 
 ![Alt text](https://raw.githubusercontent.com/yucefsourani/ar-change-grub2-theme/master/VirtualBox_fedora%20kde%2027%2064bit%20EFI_27_11_2017_01_59_06.png "Screenshot")
