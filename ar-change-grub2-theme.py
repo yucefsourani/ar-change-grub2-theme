@@ -49,6 +49,24 @@ REPORTING BUGS
     https://github.com/yucefsourani/ar-change-grub2-theme
 """.format(__file__,__file__,__file__,__file__)
 
+def is_within_directory(directory, target):
+
+	abs_directory = os.path.abspath(directory)
+	abs_target = os.path.abspath(target)
+
+	prefix = os.path.commonprefix([abs_directory, abs_target])
+
+	return prefix == abs_directory
+
+def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+
+	for member in tar.getmembers():
+		member_path = os.path.join(path, member.name)
+		if not is_within_directory(path, member_path):
+			raise Exception("Attempted Path Traversal in Tar File")
+
+	tar.extractall(path, members, numeric_owner=numeric_owner) 
+    
 class Grub():
     def downlaod_theme(self,link,location=tempfile.gettempdir(),agent="Mozilla/5.0"):
         agent = agent={"User-Agent":agent}
@@ -85,7 +103,9 @@ class Grub():
         return saveas
 
     def unpack_theme_file(self,location):
+        tar = True
         if location.endswith('.zip'):
+            tar = False
             fun, mode = zipfile.ZipFile, 'r'
         elif location.endswith('.tar.gz') or location.endswith('.tgz'):
             fun, mode = tarfile.open, 'r:gz'
@@ -100,7 +120,10 @@ class Grub():
         try:
             file_ = fun(location, mode)
             try:
-                file_.extractall()
+                if tar:
+                     safe_extract(file_)
+                else:
+                    file_.extractall()
             except Exception as e:
                 print(e)
                 os.chdir(cwd)
